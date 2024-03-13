@@ -10,9 +10,9 @@ import java.util.Date;
 public class Accounts {
 
     @Id
-    @GeneratedValue(generator = "account_id_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name ="account_id_seq", sequenceName = "account_id_seq", allocationSize = 50)
-    @Column(name="account_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @SequenceGenerator(name ="account_id_seq", sequenceName = "account_id_seq", allocationSize = 50)
+    @Column(name="account_id", nullable = false, columnDefinition = "serial")
     private Long accountId;
 
     //Name

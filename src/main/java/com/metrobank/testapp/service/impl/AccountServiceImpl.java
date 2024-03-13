@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -20,18 +20,22 @@ public class AccountServiceImpl implements AccountService {
 
         return message;
     }
-
+    //Create Account
     public Accounts createAccount(Accounts accounts) {
-
         return  accountsRepository.save(accounts);
     }
 
-
+    //Read
     public Accounts findById(long accountId) {
         return accountsRepository.findById(accountId);
     }
 
     public List<Accounts> findAll(){
+
         return accountsRepository.findAll();
     }
+
+    //Update
+
+    //Delete
 }

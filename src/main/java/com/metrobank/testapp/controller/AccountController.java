@@ -21,13 +21,13 @@ public class AccountController {
     AccountsRepository accountsRepository;
 
     @GetMapping(path = "/findAccount/{accountId}")
-    public Accounts findAccount(@PathVariable("accountId") String accountId) {
+    public Accounts findAccount(@PathVariable("accountId") long accountId) {
         // ModelAndView modelAndView = new ModelAndView("view/home");
         //modelAndView.addObject("message", accountService.processMessage("Greetings Stranger!"));
 
         //return modelAndView;
 
-        return accountService.findById(Long.valueOf(accountId));
+        return accountService.findById(accountId);
     }
 
     @GetMapping(path = "/allAccounts")
@@ -35,9 +35,9 @@ public class AccountController {
         return accountService.findAll();
     }
 
+    //Create Account
     @PostMapping(path = "/createAccount")
     public Accounts createAccount(@RequestBody Accounts accounts) {
         return accountService.createAccount(accounts);
-
     }
 }
