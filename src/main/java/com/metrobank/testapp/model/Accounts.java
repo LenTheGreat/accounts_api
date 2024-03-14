@@ -9,10 +9,8 @@ import java.util.Date;
 @Table(schema = "metrobank-intern",name = "accounts")
 @Data
 public class Accounts {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // @SequenceGenerator(name ="account_id_seq", sequenceName = "account_id_seq", allocationSize = 50)
     @Column(name="account_id", nullable = false, columnDefinition = "serial")
     private Long accountId;
 

@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 public class AccountController {
     @Autowired
-    private AccountService accountService;
+    public  AccountService accountService;
 
     @Autowired
     AccountsRepository accountsRepository;
@@ -36,6 +36,19 @@ public class AccountController {
         return accountService.findAll();
     }
 
+    //Delete Account
+    @DeleteMapping(path = "/deleteAccount/{accountId}")
+    public ResponseEntity<String> deleteAccount(@PathVariable("accountId") Long accountId){
+        accountService.deleteAccount(accountId);
+        return ResponseEntity.ok("Account deleted successfully");
+    }
+
+    // Update Account (mema)
+    @PutMapping(path ="/updateAccount/{accountId}")
+    public Accounts updateAccount (@PathVariable("accountId") long accountId, @RequestBody Accounts accounts){
+    return accountService.updateAccount(accountId,accounts);
+    }
+
     //Create Account
     @PostMapping(path = "/createAccount")
     public ResponseEntity<String> createAccount(@RequestBody Accounts accounts) {
@@ -49,7 +62,8 @@ public class AccountController {
         else{
             return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with the same email address or mobile number already exists");
         }
-
-
     }
+
+
+
 }

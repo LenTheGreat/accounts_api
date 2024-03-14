@@ -10,6 +10,8 @@ public interface AccountService {
     String processMessage(String input);
     Accounts createAccount(Accounts accounts);
 
+    Accounts updateAccount (long accountId, Accounts accounts);
+
     Accounts findById(long accountId);
 
     Accounts findByMobileNumber(String mobileNumber);
@@ -19,7 +21,6 @@ public interface AccountService {
 
     List<Accounts> findAll();
 
-
-
+    void deleteAccount(Long accountId);
 
 }
