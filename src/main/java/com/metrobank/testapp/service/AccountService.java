@@ -12,7 +12,14 @@ public interface AccountService {
 
     Accounts findById(long accountId);
 
+    Accounts findByMobileNumber(String mobileNumber);
+    Accounts findByEmailAddress(String emailAddress);
+
+    //Accounts findByEmailandMobileNumber(String emailAddress, String mobileNumber);
+
     List<Accounts> findAll();
+
+
 
 
 }

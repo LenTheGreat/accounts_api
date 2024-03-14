@@ -4,9 +4,10 @@ import com.metrobank.testapp.model.Accounts;
 import com.metrobank.testapp.repository.AccountsRepository;
 import com.metrobank.testapp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -37,7 +38,18 @@ public class AccountController {
 
     //Create Account
     @PostMapping(path = "/createAccount")
-    public Accounts createAccount(@RequestBody Accounts accounts) {
-        return accountService.createAccount(accounts);
+    public ResponseEntity<String> createAccount(@RequestBody Accounts accounts) {
+        Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());
+        Accounts existingMobileNumber = accountService.findByMobileNumber(accounts.getMobileNumber());
+
+        if(existingEmailAddress == null && existingMobileNumber == null){
+            accountService.createAccount(accounts);
+            return ResponseEntity.status(HttpStatus.OK).body("Account created succesfully");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with the same email address or mobile number already exists");
+        }
+
+
     }
 }

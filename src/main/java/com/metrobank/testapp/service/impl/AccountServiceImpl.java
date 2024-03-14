@@ -35,6 +35,14 @@ public class AccountServiceImpl implements AccountService {
         return accountsRepository.findAll();
     }
 
+    public Accounts findByMobileNumber(String mobileNumber) {
+        return accountsRepository.findByMobileNumber(mobileNumber);
+    }
+    public Accounts findByEmailAddress(String emailAddress) {
+        return accountsRepository.findByEmailAddress(emailAddress);
+    }
+
+
     //Update
 
     //Delete
