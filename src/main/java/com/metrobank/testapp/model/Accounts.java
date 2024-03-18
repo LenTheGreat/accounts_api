@@ -1,85 +1,86 @@
 package com.metrobank.testapp.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 @Entity
+@Builder
 @Table(schema = "metrobank-intern",name = "accounts")
 @Data
 public class Accounts {
-
     @Id
-    @GeneratedValue(generator = "account_id_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name ="account_id_seq", sequenceName = "account_id_seq", allocationSize = 50)
-    @Column(name="account_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="account_id", nullable = false, columnDefinition = "serial")
     private Long accountId;
 
     //Name
-    @Column(name="first_name")
+    @Column(name="first_name", nullable = false)
     private String firstName;
 
-    @Column(name="middle_name")
+    @Column(name="middle_name", nullable = false)
     private String middleName;
 
-    @Column(name="last_name")
+    @Column(name="last_name",nullable = false)
     private String lastName;
 
     //Contacts
-    @Column(name="mobile_number")
+    @Column(name="mobile_number",nullable = false)
     private String mobileNumber;
 
-    @Column(name="telephone_number")
+    @Column(name="telephone_number",nullable = true)
     private String telephoneNumber;
 
-    @Column(name="email_address")
+    @Column(name="email_address",nullable = false)
     private String emailAddress;
 
     //DOB
-    @Column(name="date_of_birth")
+    @Column(name="date_of_birth",nullable = false)
     private String dateOfBirth;
 
     //Accounts Type
-    @Column(name="checking_account")
+    @Column(name="checking_account", nullable = false)
     private Boolean checkingAccount;
 
-    @Column(name="savings_account")
+    @Column(name="savings_account", nullable = false)
     private Boolean savingsAccount;
 
-    @Column(name="money_market_account")
+    @Column(name="money_market_account", nullable = false)
     private Boolean moneyMarketAccount;
 
-    @Column(name="certificate_of_deposit_account")
+    @Column(name="certificate_of_deposit_account", nullable = false)
     private Boolean certificateOfDepositAccount;
 
 
     //Address
-    @Column(name="home_address_street")
+    @Column(name="home_address_street", nullable = false)
     private String homeAddress_street;
 
-    @Column(name="home_address_city")
+    @Column(name="home_address_city", nullable = false)
     private String homeAddress_city;
 
-    @Column(name="home_address_province")
+    @Column(name="home_address_province", nullable = false)
     private String homeAddress_province;
 
-    @Column(name="home_address_zip_code")
+    @Column(name="home_address_zip_code", nullable = false)
     private String homeAddress_zipCode;
 
-    @Column(name="permanent_address_street")
+    @Column(name="permanent_address_street", nullable = false)
     private String permanentAddress_street;
 
-    @Column(name="permanent_address_city")
+    @Column(name="permanent_address_city", nullable = false)
     private String permanentAddress_city;
 
-    @Column(name="permanent_address_province")
+    @Column(name="permanent_address_province", nullable = false)
     private String permanentAddress_province;
 
-    @Column(name="permanent_address_zip_code")
+    @Column(name="permanent_address_zip_code", nullable = false)
     private String permanentAddress_zipCode;
 
     //MonthlySalary
-    @Column(name="monthly_salary")
+    @Column(name="monthly_salary", nullable = false)
     private double monthlySalary;
 
     public Accounts(long accountId, String firstName, String middleName, String lastName, String mobileNumber, String telephoneNumber, String emailAddress, String dateOfBirth, boolean checkingAccount, boolean savingsAccount, boolean moneyMarketAccount, boolean certificateOfDepositAccount, String homeAddress_street, String homeAddress_city, String homeAddress_province, String homeAddress_zipCode, String permanentAddress_street, String permanentAddress_city, String permanentAddress_province, String permanentAddress_zipCode, double monthlySalary){
