@@ -1,11 +1,13 @@
 package com.metrobank.testapp.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 @Entity
+@Builder
 @Table(schema = "metrobank-intern",name = "accounts")
 @Data
 public class Accounts {

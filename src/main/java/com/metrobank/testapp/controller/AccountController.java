@@ -45,8 +45,26 @@ public class AccountController {
 
     // Update Account (mema)
     @PutMapping(path ="/updateAccount/{accountId}")
-    public Accounts updateAccount (@PathVariable("accountId") long accountId, @RequestBody Accounts accounts){
-    return accountService.updateAccount(accountId,accounts);
+    public ResponseEntity<String>  updateAccount(@PathVariable("accountId") long accountId, @RequestBody Accounts accounts){
+        Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());
+        Accounts existingMobileNumber = accountService.findByMobileNumber(accounts.getMobileNumber());
+
+        Accounts existingAccount = accountService.findById(accountId);
+
+        //Check if there is an existing account
+        if(existingAccount == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account does not exist");
+        }
+
+        //Check if there are existing email address or mobile number
+        if((existingEmailAddress != null && existingEmailAddress.getAccountId() != accountId) ||
+                (existingMobileNumber != null && existingMobileNumber.getAccountId() != accountId)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with the same email address or mobile number already exists");
+        }
+
+        //Update Account
+        accountService.updateAccount(accountId, accounts);
+        return ResponseEntity.status(HttpStatus.OK).body("Account updated successfully");
     }
 
     //Create Account
