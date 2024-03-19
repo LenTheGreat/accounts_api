@@ -1,13 +1,12 @@
 package com.metrobank.testapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 @Entity
-@Builder
 @Table(schema = "metrobank-intern",name = "accounts")
 @Data
 public class Accounts {
@@ -18,72 +17,92 @@ public class Accounts {
 
     //Name
     @Column(name="first_name", nullable = false)
+    @NotBlank(message = "First name must not be blank")
     private String firstName;
 
     @Column(name="middle_name", nullable = false)
+    @NotBlank(message = "Middle name must not be blank")
     private String middleName;
 
     @Column(name="last_name",nullable = false)
+    @NotBlank(message = "Last name must not be blank")
     private String lastName;
 
     //Contacts
     @Column(name="mobile_number",nullable = false)
+    @NotBlank(message = "Mobile Number must not be blank")
     private String mobileNumber;
 
     @Column(name="telephone_number",nullable = true)
     private String telephoneNumber;
 
     @Column(name="email_address",nullable = false)
+    @NotBlank(message = "Email Address must not be blank")
     private String emailAddress;
 
     //DOB
     @Column(name="date_of_birth",nullable = false)
+    @NotBlank(message = "Date of Birth must not be blank")
     private String dateOfBirth;
 
     //Accounts Type
     @Column(name="checking_account", nullable = false)
+    @NotNull(message = "Enter true or false if this is the type of account you want to open")
     private Boolean checkingAccount;
 
     @Column(name="savings_account", nullable = false)
+    @NotNull(message = "Enter true or false if this is the type of account you want to open")
     private Boolean savingsAccount;
 
     @Column(name="money_market_account", nullable = false)
+    @NotNull(message = "Enter true or false if this is the type of account you want to open")
     private Boolean moneyMarketAccount;
 
     @Column(name="certificate_of_deposit_account", nullable = false)
+    @NotNull(message = "Enter true or false if this is the type of account you want to open")
     private Boolean certificateOfDepositAccount;
 
 
     //Address
     @Column(name="home_address_street", nullable = false)
+    @NotBlank(message = "Street must not be blank")
     private String homeAddress_street;
 
     @Column(name="home_address_city", nullable = false)
+    @NotBlank(message = "City must not be blank")
     private String homeAddress_city;
 
     @Column(name="home_address_province", nullable = false)
+    @NotBlank(message = "Province must not be blank")
     private String homeAddress_province;
 
     @Column(name="home_address_zip_code", nullable = false)
+    @NotBlank(message = "Zipcode must not be blank")
     private String homeAddress_zipCode;
 
     @Column(name="permanent_address_street", nullable = false)
+    @NotBlank(message = "Street must not be blank")
     private String permanentAddress_street;
 
     @Column(name="permanent_address_city", nullable = false)
+    @NotBlank(message = "City must not be blank")
     private String permanentAddress_city;
 
     @Column(name="permanent_address_province", nullable = false)
+    @NotBlank(message = "Province must not be blank")
     private String permanentAddress_province;
 
     @Column(name="permanent_address_zip_code", nullable = false)
+    @NotBlank(message = "Zipcode must not be blank")
     private String permanentAddress_zipCode;
 
     //MonthlySalary
     @Column(name="monthly_salary", nullable = false)
+    @NotNull(message = "Monthly Salary must not be blank")
     private double monthlySalary;
 
-    public Accounts(long accountId, String firstName, String middleName, String lastName, String mobileNumber, String telephoneNumber, String emailAddress, String dateOfBirth, boolean checkingAccount, boolean savingsAccount, boolean moneyMarketAccount, boolean certificateOfDepositAccount, String homeAddress_street, String homeAddress_city, String homeAddress_province, String homeAddress_zipCode, String permanentAddress_street, String permanentAddress_city, String permanentAddress_province, String permanentAddress_zipCode, double monthlySalary){
+    @Builder
+    public Accounts(long accountId, String firstName, String middleName, String lastName, String mobileNumber,String telephoneNumber ,String emailAddress, String dateOfBirth, boolean checkingAccount, boolean savingsAccount, boolean certificateOfDepositAccount, boolean moneyMarketAccount, String homeAddress_street, String homeAddress_city, String homeAddress_province, String homeAddress_zipCode, String permanentAddress_street, String permanentAddress_city, String permanentAddress_province, String permanentAddress_zipCode, double monthlySalary ){
 
         //Account ID
         this.accountId = accountId;
@@ -124,6 +143,7 @@ public class Accounts {
     }
 
     public Accounts(){}
+
 }
 
 

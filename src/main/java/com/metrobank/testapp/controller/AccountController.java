@@ -3,10 +3,12 @@ package com.metrobank.testapp.controller;
 import com.metrobank.testapp.model.Accounts;
 import com.metrobank.testapp.repository.AccountsRepository;
 import com.metrobank.testapp.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,11 +47,14 @@ public class AccountController {
 
     // Update Account (mema)
     @PutMapping(path ="/updateAccount/{accountId}")
-    public ResponseEntity<String>  updateAccount(@PathVariable("accountId") long accountId, @RequestBody Accounts accounts){
+    public ResponseEntity<String>  updateAccount(@PathVariable("accountId") long accountId, @RequestBody@Valid Accounts accounts,BindingResult bindingResult){
         Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());
         Accounts existingMobileNumber = accountService.findByMobileNumber(accounts.getMobileNumber());
-
         Accounts existingAccount = accountService.findById(accountId);
+
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().body("Validation Failed");
+        }
 
         //Check if there is an existing account
         if(existingAccount == null){
@@ -69,10 +74,13 @@ public class AccountController {
 
     //Create Account
     @PostMapping(path = "/createAccount")
-    public ResponseEntity<String> createAccount(@RequestBody Accounts accounts) {
+    public ResponseEntity<String> createAccount(@RequestBody @Valid Accounts accounts, BindingResult bindingResult) {
         Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());
         Accounts existingMobileNumber = accountService.findByMobileNumber(accounts.getMobileNumber());
 
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().body("Validation failed");
+        }
         if(existingEmailAddress == null && existingMobileNumber == null){
             accountService.createAccount(accounts);
             return ResponseEntity.status(HttpStatus.OK).body("Account created succesfully");
