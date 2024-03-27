@@ -108,7 +108,7 @@ public class Accounts {
         this.accountId = accountId;
 
         //Name
-        this.firstName = firstName;
+            this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
 

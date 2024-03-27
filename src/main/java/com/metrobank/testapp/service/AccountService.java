@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface AccountService {
-    String processMessage(String input);
+   // String processMessage(String input);
     Accounts createAccount(Accounts accounts);
 
     Accounts updateAccount (long accountId, Accounts accounts);

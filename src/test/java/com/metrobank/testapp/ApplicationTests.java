@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class TestappApplicationTests {
+class ApplicationTests {
 	@Autowired
 	private MockMvc mockMvc;
 	@Mock
@@ -61,6 +61,8 @@ class TestappApplicationTests {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	//Postive
+
 	@Test
 	void creatingAnAccountTest(){
 
@@ -73,7 +75,7 @@ class TestappApplicationTests {
 	@Test
 	void updatingAnExistingAccountTest(){
 		Accounts existingAccount = new Accounts();
-		existingAccount.getAccountId();
+		//existingAccount.getAccountId();
 
 		existingAccount.setAccountId(7l);
 		existingAccount.setFirstName("Sun");
@@ -89,7 +91,7 @@ class TestappApplicationTests {
 		existingAccount.setDateOfBirth("March 7 2007");
 
 		existingAccount.setCheckingAccount(false);
-		existingAccount.setSavingsAccount(false);
+		existingAccount.setSavingsAccount(true);
 		existingAccount.setMoneyMarketAccount(false);
 		existingAccount.setCertificateOfDepositAccount(false);
 
@@ -102,6 +104,7 @@ class TestappApplicationTests {
 		existingAccount.setPermanentAddress_street("Mangahan");
 		existingAccount.setPermanentAddress_province("Rizal");
 		existingAccount.setPermanentAddress_zipCode("1950");
+
 
 		when(this.accountsRepository.save(existingAccount)).thenReturn(existingAccount);
 		assertThat(existingAccount).isNotNull();
@@ -161,14 +164,86 @@ class TestappApplicationTests {
 	}
 
 	@Test
-	void ShouldDeleteUserWhenGivenIdIsFound(){
+	void shouldDeleteUserWhenGivenIdIsFound(){
 		Accounts accounts =new Accounts();
-		accounts.setAccountId(4L);
-		when(accountsRepository.findById(accounts.getAccountId())).thenReturn(null);
+		Long accountIdToDelete = 5l;
+		//when(accountsRepository.findById(accounts.getAccountId())).thenReturn(null);
 		accountService.deleteAccount(accounts.getAccountId());
 
-		verify(accountsRepository).deleteById(accounts.getAccountId());
+		verify(accountsRepository, times(1)).deleteById(accountIdToDelete);
 	}
+	//Negative
+	@Test
+	void shouldNotFindAnAccountWithUnknownId() throws Exception{
+		long accountIdtoFind = 21L;
+		Accounts nullAccount = new Accounts();
+		when(accountsRepository.findById(accountIdtoFind)).thenReturn(null);
+
+		Accounts foundAccount = accountService.findById(accountIdtoFind);
+		assertThat(foundAccount).isNotEqualTo(nullAccount);
+
+		verify(accountsRepository, times(1)).findById(accountIdtoFind);
+
+		verifyNoMoreInteractions(accountsRepository);
+	}
+
+	@Test
+	void shouldNotUpdateAnAccountWithUnknownId(){
+		long unknownId = 7l;
+		Accounts updatingAccount = new Accounts();
+		updatingAccount.setAccountId(unknownId);
+		updatingAccount.setFirstName("Sun");
+		updatingAccount.setMiddleName("K.");
+		updatingAccount.setLastName("Wukong");
+
+		updatingAccount.setMobileNumber("384");
+		updatingAccount.setTelephoneNumber("2564");
+		updatingAccount.setEmailAddress("test@email.com");
+
+		updatingAccount.setMonthlySalary(56368);
+
+		updatingAccount.setDateOfBirth("March 7 2007");
+
+		updatingAccount.setCheckingAccount(false);
+		updatingAccount.setSavingsAccount(true);
+		updatingAccount.setMoneyMarketAccount(false);
+		updatingAccount.setCertificateOfDepositAccount(false);
+
+		updatingAccount.setHomeAddress_city("Cainta");
+		updatingAccount.setHomeAddress_street("Mangahan");
+		updatingAccount.setHomeAddress_province("Rizal");
+		updatingAccount.setHomeAddress_zipCode("1950");
+
+		updatingAccount.setPermanentAddress_city("Cainta");
+		updatingAccount.setPermanentAddress_street("Mangahan");
+		updatingAccount.setPermanentAddress_province("Rizal");
+		updatingAccount.setPermanentAddress_zipCode("1950");
+
+		long legitAccountId = 2l;
+
+		when(accountService.findById(unknownId)).thenReturn(updatingAccount);
+		assertThat(updatingAccount.getAccountId()).isNotEqualTo(accountService.findById(legitAccountId));
+	}
+
+	@Test
+	void shouldNotDeleteAccountWithUnknownId(){
+		//GIVEN
+		long unknownId = 86l;
+		Accounts accounts = new Accounts();
+		accounts.setAccountId(unknownId);
+		//WHEN
+		Accounts accountToDelete = accountService.findById(accounts.getAccountId());
+		when(accountToDelete.getAccountId()).thenReturn(null);
+		//THEN
+		//assertThat()
+
+
+
+
+	}
+
+
+
 
 	/*
 	@Test
@@ -184,7 +259,6 @@ class TestappApplicationTests {
 	}
 
 */
-
 
 	@Test
 	void shouldReturnDefaultMessage() throws Exception {

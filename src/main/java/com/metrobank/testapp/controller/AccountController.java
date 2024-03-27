@@ -8,20 +8,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
-@Controller
+//@RequestMapping("/accounts")
 public class AccountController {
     @Autowired
     public  AccountService accountService;
 
     @Autowired
     AccountsRepository accountsRepository;
+
+    @GetMapping("/")
+    public ModelAndView viewHomePage(){
+        ModelAndView modelAndView = new ModelAndView("view/index");
+        modelAndView.addObject("listAccounts", accountService.findAll());
+        return modelAndView;
+    }
+
+    @GetMapping("/showNewAccountForm")
+    public ModelAndView showNewAccountForm (Model model){
+
+        ModelAndView modelAndView = new ModelAndView("view/new_accounts");
+        Accounts accounts = new Accounts();
+        model.addAttribute("accounts", accounts);
+        return modelAndView;
+    }
+
+    @PostMapping("/saveAccount")
+    public ModelAndView saveAccount(@ModelAttribute("accounts") Accounts accounts, ModelMap model){
+        accountService.createAccount(accounts);
+        return new ModelAndView("redirect:/", model);
+    }
+
+    @GetMapping("/showFormForUpdate/{id}")
+    public ModelAndView showFormForUpdate(@PathVariable(value = "id") long id, Model model){
+        Accounts accounts = accountService.findById(id);
+        ModelAndView modelAndView = new ModelAndView("view/update_accounts");
+        model.addAttribute("accounts", accounts);
+        return modelAndView;
+    }
+
+    @GetMapping("/deleteAccount/{id}")
+    public ModelAndView deleteAccount(@PathVariable(value = "id") long id, Model model){
+        this.accountService.deleteAccount(id);
+        return new ModelAndView("redirect:/");
+    }
+
 
     @GetMapping(path = "/findAccount/{accountId}")
     public Accounts findAccount(@PathVariable("accountId") long accountId) {

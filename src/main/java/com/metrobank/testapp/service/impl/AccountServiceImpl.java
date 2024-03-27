@@ -18,12 +18,12 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountsRepository accountsRepository;
 
-    public String processMessage(String input) {
+  /*  public String processMessage(String input) {
         String message = input +
                 " - Service added me";
 
         return message;
-    }
+    }*/
 
     //Create Account
     public Accounts createAccount(Accounts accounts) {
@@ -53,9 +53,10 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Long accountId) {
         accountsRepository.deleteById(accountId);
     }
-    //Update (mema)
+    //Update
     public Accounts updateAccount (long accountId, Accounts accounts){
         Optional<Accounts> accountsData = Optional.ofNullable(accountsRepository.findById(accountId));
+
         if(accountsData.isPresent()){
             Accounts accountsDb = accountsData.get();
             accountsDb.setFirstName(accounts.getFirstName());
