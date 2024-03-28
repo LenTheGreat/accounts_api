@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Long> {
+
     Accounts findById(long accountId);
     Accounts findByEmailAddress(String emailAddress);
     Accounts findByMobileNumber(String mobileNumber);
