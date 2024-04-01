@@ -40,6 +40,7 @@
             <th>Permanent Address City</th>
             <th>Permanent Address Province</th>
             <th>Permanent Address Zip Code</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -68,7 +69,14 @@
 
 
             <td> <a th:href="@{/showFormForUpdate/{id}(id=${accounts.accountId})}" class="btn btn-primary">Update</a>
-                <a th:href="@{/deleteAccount/{id}(id=${accounts.accountId})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/deleteAccount/{id}(id=${accounts.accountId})}"
+                   class="btn btn-danger"
+                   th:data-confirm-delete="|Are you sure you want to delete the account of ${accounts.firstName} ${accounts.lastName}?|"
+                   th:attr="onclick=|if(!confirm(this.getAttribute('data-confirm-delete'))) return false|"
+                >
+                    Delete
+
+                </a>
             </td>
         </tr>
         </tbody>

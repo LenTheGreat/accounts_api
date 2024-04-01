@@ -42,7 +42,12 @@ public class AccountController {
     }
 
     @PostMapping("/saveAccount")
-    public ModelAndView saveAccount(@ModelAttribute("accounts") Accounts accounts, ModelMap model){
+    public ModelAndView saveAccount(@Valid @ModelAttribute("accounts") Accounts accounts, ModelMap model, BindingResult bindingResult){
+      /*  if (bindingResult.hasErrors()) {
+
+            return new ModelAndView("view/new_accounts", model);
+        }*/
+
         accountService.createAccount(accounts);
         return new ModelAndView("redirect:/", model);
     }
