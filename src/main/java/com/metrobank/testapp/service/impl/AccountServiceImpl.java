@@ -5,6 +5,10 @@ import com.metrobank.testapp.repository.AccountsRepository;
 import com.metrobank.testapp.service.AccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
         return accountsRepository.findByEmailAddress(emailAddress);
     }
 
-  //Delete
+    //Delete
     public void deleteAccount(Long accountId) {
         accountsRepository.deleteById(accountId);
     }
@@ -93,6 +97,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
 }
+
+    // Pagination
+    public Page <Accounts> findPaginated (int pageNumber, int pageSize, String sortField, String sortDirection){
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize,sort);
+        return this.accountsRepository.findAll(pageable);
+    }
 
 }
 

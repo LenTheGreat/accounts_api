@@ -5,9 +5,9 @@ import com.metrobank.testapp.repository.AccountsRepository;
 import com.metrobank.testapp.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,12 +25,43 @@ public class AccountController {
     @Autowired
     AccountsRepository accountsRepository;
 
+
     @GetMapping("/")
-    public ModelAndView viewHomePage(){
+    public ModelAndView viewHomePage(Model model){
+
+        return findPaginated(1,"firstName","asc",model);
+    }
+    @GetMapping("/Home")
+    public ModelAndView viewHomePage1(){
         ModelAndView modelAndView = new ModelAndView("view/index");
         modelAndView.addObject("listAccounts", accountService.findAll());
         return modelAndView;
     }
+    @GetMapping("/page/{pageNumber}")
+    public ModelAndView findPaginated (@PathVariable (value = "pageNumber") int pageNumber,
+                                       @RequestParam("sortField") String sortField,
+                                       @RequestParam("sortDir") String sortDir,
+                                       Model model){
+        ModelAndView modelAndView = new ModelAndView("view/index");
+        int pageSize = 3;
+
+        Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir);
+        List<Accounts> listAccounts =page.getContent();
+
+        modelAndView.addObject("currentPage",pageNumber);
+        modelAndView.addObject("totalPages",page.getTotalPages());
+        modelAndView.addObject("totalItems",page.getTotalElements());
+
+        modelAndView.addObject("sortField",sortField);
+        modelAndView.addObject("sortDir",sortDir);
+        modelAndView.addObject("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+
+        model.addAttribute("listAccounts",listAccounts);
+
+        return modelAndView ;
+    }
+
+
 
     @GetMapping("/showNewAccountForm")
     public ModelAndView showNewAccountForm (Model model){
@@ -53,7 +84,7 @@ public class AccountController {
     }
 
     @GetMapping("/showFormForUpdate/{id}")
-    public ModelAndView showFormForUpdate(@PathVariable(value = "id") long id, Model model){
+    public ModelAndView showFormForUpdate(@PathVariable(value = "id") Long id, Model model){
         Accounts accounts = accountService.findById(id);
         ModelAndView modelAndView = new ModelAndView("view/update_accounts");
         model.addAttribute("accounts", accounts);
@@ -67,6 +98,10 @@ public class AccountController {
     }
 
 
+
+
+    //POST MAN
+
     @GetMapping(path = "/findAccount/{accountId}")
     public Accounts findAccount(@PathVariable("accountId") long accountId) {
         // ModelAndView modelAndView = new ModelAndView("view/home");
@@ -76,6 +111,7 @@ public class AccountController {
 
         return accountService.findById(accountId);
     }
+
 
     @GetMapping(path = "/allAccounts")
     public List<Accounts> getAllAccounts(){
