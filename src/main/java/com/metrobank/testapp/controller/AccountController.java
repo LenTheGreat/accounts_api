@@ -43,7 +43,7 @@ public class AccountController {
                                        @RequestParam("sortDir") String sortDir,
                                        Model model){
         ModelAndView modelAndView = new ModelAndView("view/index");
-        int pageSize = 3;
+        int pageSize = 1;
 
         Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir);
         List<Accounts> listAccounts =page.getContent();
