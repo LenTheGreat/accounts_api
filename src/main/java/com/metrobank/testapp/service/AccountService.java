@@ -24,6 +24,8 @@ public interface AccountService {
 
     void deleteAccount(Long accountId);
 
-    Page<Accounts> findPaginated(int pageNumber, int pageSize, String sortField, String sortDirection );
+    Page<Accounts> findPaginated(int pageNumber, int pageSize, String sortField, String sortDirection, String keyword );
+
+    List<Accounts> getByKeyword(String keyword);
 
 }

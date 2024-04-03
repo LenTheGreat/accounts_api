@@ -14,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 @RestController
@@ -26,10 +28,10 @@ public class AccountController {
     AccountsRepository accountsRepository;
 
 
-    @GetMapping("/")
-    public ModelAndView viewHomePage(Model model){
+    @GetMapping({"/","/search"})
+    public ModelAndView viewHomePage(Accounts accounts,Model model, String keyword){
 
-        return findPaginated(1,"firstName","asc",model);
+        return findPaginated(1,"firstName","asc",keyword,model);
     }
 
     /*@GetMapping("/Home")
@@ -43,11 +45,12 @@ public class AccountController {
     public ModelAndView findPaginated (@PathVariable (value = "pageNumber") int pageNumber,
                                        @RequestParam("sortField") String sortField,
                                        @RequestParam("sortDir") String sortDir,
+                                       @RequestParam(name="keyword", required=false) String keyword,
                                        Model model){
         ModelAndView modelAndView = new ModelAndView("view/index");
         int pageSize = 3;
 
-        Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir);
+        Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir,keyword );
         List<Accounts> listAccounts =page.getContent();
 
         modelAndView.addObject("currentPage",pageNumber);
@@ -98,9 +101,6 @@ public class AccountController {
         this.accountService.deleteAccount(id);
         return new ModelAndView("redirect:/");
     }
-
-
-
 
     //POST MAN
 

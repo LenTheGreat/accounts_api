@@ -12,8 +12,13 @@
 <body>
 
 <div class="container my-2">
-    <h1 >Accounts List</h1>
-
+    <h2 align="center"> Accounts List</h2>>
+    <form method="get" th:action="@{/page/1}">
+        <input name="keyword" placeholder="Find by name" size="50" th:value="${keyword}" type="text">
+        <input type="hidden" name="sortField" size="50" th:value="${sortField}" >
+        <input type="hidden" name="sortDir" size="50" th:value="${sortDir}">
+        <button class="btn btn-info" type="submit">Search</button>
+    </form>
     <a th:href="@{/showNewAccountForm}" class="btn btn-primary btn-sm mb-3"> Add Account </a>
 
     <table border="1" class="table table-sm table-responsive">

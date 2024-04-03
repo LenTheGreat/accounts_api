@@ -30,39 +30,45 @@ public class AccountServiceImpl implements AccountService {
     }*/
 
     //Create Account
-    public Accounts createAccount(Accounts accounts) {
+    public Accounts createAccount(final Accounts accounts) {
 
-        return accountsRepository.save(accounts);
+        return this.accountsRepository.save(accounts);
+    }
+
+    @Override
+    public List<Accounts> getByKeyword(final String keyword) {
+        return this.accountsRepository.findByKeyword(keyword);
     }
 
     //Read
-    public Accounts findById(long accountId) {
+    public Accounts findById(final long accountId) {
 
-        return accountsRepository.findById(accountId);
+        return this.accountsRepository.findById(accountId);
     }
 
     public List<Accounts> findAll() {
-        return accountsRepository.findAll();
+        return this.accountsRepository.findAll();
     }
 
-    public Accounts findByMobileNumber(String mobileNumber) {
-        return accountsRepository.findByMobileNumber(mobileNumber);
+    public Accounts findByMobileNumber(final String mobileNumber) {
+        return this.accountsRepository.findByMobileNumber(mobileNumber);
     }
 
-    public Accounts findByEmailAddress(String emailAddress) {
-        return accountsRepository.findByEmailAddress(emailAddress);
+    public Accounts findByEmailAddress(final String emailAddress) {
+        return this.accountsRepository.findByEmailAddress(emailAddress);
     }
 
     //Delete
-    public void deleteAccount(Long accountId) {
-        accountsRepository.deleteById(accountId);
+    public void deleteAccount(final Long accountId) {
+        this.accountsRepository.deleteById(accountId);
     }
-    //Update
-    public Accounts updateAccount (long accountId, Accounts accounts){
-        Optional<Accounts> accountsData = Optional.ofNullable(accountsRepository.findById(accountId));
 
-        if(accountsData.isPresent()){
-            Accounts accountsDb = accountsData.get();
+    //Update
+    public Accounts updateAccount(final long accountId, final Accounts accounts) {
+        final Optional<Accounts> accountsData = Optional.ofNullable(this.accountsRepository.findById(accountId));
+
+        if (accountsData.isPresent()) {
+            final Accounts accountsDb = accountsData.get();
             accountsDb.setFirstName(accounts.getFirstName());
             accountsDb.setMiddleName(accounts.getMiddleName());
             accountsDb.setLastName(accounts.getLastName());
@@ -90,20 +96,25 @@ public class AccountServiceImpl implements AccountService {
             accountsDb.setPermanentAddress_province(accounts.getPermanentAddress_province());
             accountsDb.setPermanentAddress_zipCode(accounts.getPermanentAddress_zipCode());
 
-            return accountsRepository.save(accountsDb);
+            return this.accountsRepository.save(accountsDb);
 
         } else {
             return null;
+        }
+
     }
 
-}
-
     // Pagination
-    public Page <Accounts> findPaginated (int pageNumber, int pageSize, String sortField, String sortDirection){
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+    public Page<Accounts> findPaginated(final int pageNumber, final int pageSize, final String sortField, final String sortDirection, final String keyword) {
+        final Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize,sort);
-        return this.accountsRepository.findAll(pageable);
+        final Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+        if ((keyword != null ) && (keyword != "")) {
+            return accountsRepository.findByFirstName(keyword, pageable);
+        } else {
+            return accountsRepository.findAll(pageable);
+        }
     }
 
 }
