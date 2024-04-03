@@ -31,19 +31,21 @@ public class AccountController {
 
         return findPaginated(1,"firstName","asc",model);
     }
-    @GetMapping("/Home")
+
+    /*@GetMapping("/Home")
     public ModelAndView viewHomePage1(){
         ModelAndView modelAndView = new ModelAndView("view/index");
         modelAndView.addObject("listAccounts", accountService.findAll());
         return modelAndView;
-    }
+    }*/
+
     @GetMapping("/page/{pageNumber}")
     public ModelAndView findPaginated (@PathVariable (value = "pageNumber") int pageNumber,
                                        @RequestParam("sortField") String sortField,
                                        @RequestParam("sortDir") String sortDir,
                                        Model model){
         ModelAndView modelAndView = new ModelAndView("view/index");
-        int pageSize = 1;
+        int pageSize = 3;
 
         Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir);
         List<Accounts> listAccounts =page.getContent();
@@ -125,7 +127,7 @@ public class AccountController {
         return ResponseEntity.ok("Account deleted successfully");
     }
 
-    // Update Account (mema)
+    // Update Account
     @PutMapping(path ="/updateAccount/{accountId}")
     public ResponseEntity<String>  updateAccount(@PathVariable("accountId") long accountId, @RequestBody@Valid Accounts accounts,BindingResult bindingResult){
         Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());

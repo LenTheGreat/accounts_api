@@ -91,7 +91,7 @@
 </body><div th:if = "${totalPages > 1}">
     <div class = "row col-sm-10">
         <div >
-            Total Accounts: [[${totalItems}]] &emsp;
+            &emsp; Total Accounts: [[${totalItems}]] &emsp;
         </div>
         <div class>
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
