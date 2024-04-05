@@ -5,31 +5,41 @@
     <meta charset="ISO-8859-1">
     <title>Account Management System</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
 
 </head>
 
 <body>
 
 <div class="container my-2">
-    <h2 align="center"> Accounts List</h2>>
+    <h2 align="center"> Account List</h2>
     <form method="get" th:action="@{/page/1}">
-        <input name="keyword" placeholder="Find by name" size="50" th:value="${keyword}" type="text">
-        <input type="hidden" name="sortField" size="50" th:value="${sortField}" >
-        <input type="hidden" name="sortDir" size="50" th:value="${sortDir}">
-        <button class="btn btn-info" type="submit">Search</button>
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm-8"><a class="btn btn-primary" th:href="@{/showNewAccountForm}"> Add Account </a>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <input name="keyword" placeholder="Find by name" size="20" th:value="${keyword}" type="text">
+                        <input name="sortField" size="50" th:value="${sortField}" type="hidden">
+                        <input name="sortDir" size="50" th:value="${sortDir}" type="hidden">
+                        <button class="btn btn-info" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
-    <a th:href="@{/showNewAccountForm}" class="btn btn-primary btn-sm mb-3"> Add Account </a>
-
-    <table border="1" class="table table-sm table-responsive">
-        <thead>
+    <br>
+    <table border="0.5" class="table table-bordered table-responsive">
+        <thead class="thead-light">
         <tr>
             <th>
                 <a th:href="@{'/page/' + ${currentPage} + '?sortField=accountId&sortDir=' + ${reverseSortDir}}">
-                ID
+                    ID
                 </a>
             </th>
-            <th>First Name</th>
+            <th >First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>Mobile Number</th>
@@ -77,47 +87,54 @@
             <td th:text="${accounts.permanentAddress_zipCode}"></td>
 
 
-            <td> <a th:href="@{/showFormForUpdate/{id}(id=${accounts.accountId})}" class="btn btn-primary">Update</a>
-                <a th:href="@{/deleteAccount/{id}(id=${accounts.accountId})}"
-                   class="btn btn-danger"
-                   th:data-confirm-delete="|Are you sure you want to delete the account of ${accounts.firstName} ${accounts.lastName}?|"
+            <td><a class="btn btn-primary" th:href="@{/showFormForUpdate/{id}(id=${accounts.accountId})}">Update</a>
+
+                <a class="btn btn-danger"
                    th:attr="onclick=|if(!confirm(this.getAttribute('data-confirm-delete'))) return false|"
+                   th:data-confirm-delete="|Are you sure you want to delete the account of ${accounts.firstName} ${accounts.lastName}?|"
+                   th:href="@{/deleteAccount/{id}(id=${accounts.accountId})}"
                 >
                     Delete
-
                 </a>
             </td>
         </tr>
         </tbody>
     </table>
 
-
 </div>
-</body><div th:if = "${totalPages > 1}">
-    <div class = "row col-sm-10">
-        <div >
+</body>
+<div th:if="${totalPages > 1}">
+    <div class="container">
+    <div class="row col-sm-10">
+        <div class="col">
             &emsp; Total Accounts: [[${totalItems}]] &emsp;
         </div>
-        <div class>
+<div class="col">
+
+            <a th:href="@{'/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+               th:if="${currentPage > 1}">Previous</a>
+            <span th:unless="${currentPage > 1}">Previous</span> &emsp;
+
+
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-						<a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<a th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                           th:if="${currentPage != i}">[[${i}]]</a>
 						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
 					</span>
-        </div>
-        <div class>
-            <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
-            <span th:unless="${currentPage > 1}">Previous</span>  &emsp;
-        </div>
 
-        <div class>
-            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>  &emsp;
-        </div>
 
-        <div>
-            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+            <a th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+               th:if="${currentPage < totalPages}">Next</a>
+            <span th:unless="${currentPage < totalPages}">Next</span> &emsp;
+
+    </div>
+
+       <!-- <div>
+            <a th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+               th:if="${currentPage < totalPages}">Last</a>
             <span th:unless="${currentPage < totalPages}">Last</span>
-        </div>
+        </div>-->
+    </div>
     </div>
 </div>
 

@@ -28,7 +28,7 @@ public class AccountController {
     AccountsRepository accountsRepository;
 
 
-    @GetMapping({"/","/search"})
+    @GetMapping({"/"})
     public ModelAndView viewHomePage(Accounts accounts,Model model, String keyword){
 
         return findPaginated(1,"firstName","asc",keyword,model);
