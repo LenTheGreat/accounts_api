@@ -5,8 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(schema = "metrobank-intern",name = "accounts")
 @Data
 public class Accounts {
@@ -101,14 +108,24 @@ public class Accounts {
     @NotNull(message = "Monthly Salary must not be blank")
     private double monthlySalary;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="created_at", updatable = false ,columnDefinition = "TIMESTAMP DEFAULT current_timestamp")
+    private Timestamp accountTimeCreated;
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Timestamp accountLastModified;
+
     @Builder
-    public Accounts(long accountId, String firstName, String middleName, String lastName, String mobileNumber,String telephoneNumber ,String emailAddress, String dateOfBirth, boolean checkingAccount, boolean savingsAccount, boolean certificateOfDepositAccount, boolean moneyMarketAccount, String homeAddress_street, String homeAddress_city, String homeAddress_province, String homeAddress_zipCode, String permanentAddress_street, String permanentAddress_city, String permanentAddress_province, String permanentAddress_zipCode, double monthlySalary ){
+    public Accounts(long accountId, String firstName, String middleName, String lastName, String mobileNumber,String telephoneNumber ,String emailAddress, String dateOfBirth, boolean checkingAccount, boolean savingsAccount, boolean certificateOfDepositAccount, boolean moneyMarketAccount, String homeAddress_street, String homeAddress_city, String homeAddress_province, String homeAddress_zipCode, String permanentAddress_street, String permanentAddress_city, String permanentAddress_province, String permanentAddress_zipCode, double monthlySalary, Timestamp accountTimeCreated, Timestamp accountLastModified){
 
         //Account ID
         this.accountId = accountId;
 
         //Name
-            this.firstName = firstName;
+        this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
 
@@ -140,6 +157,10 @@ public class Accounts {
 
         //Monthly Salary
         this.monthlySalary = monthlySalary;
+
+        //Account Created At
+        this.accountTimeCreated = accountTimeCreated;
+        this.accountLastModified = accountLastModified;
     }
 
     public Accounts(){}

@@ -2,70 +2,103 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <script src="script.js"></script>
     <meta charset="ISO-8859-1">
-    <title>Employee Management System</title>
+    <title>Account Management System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
 <body>
 <div class="container">
-    <h1>Accounts Management System</h1>
+    <h1>Account Management System</h1>
     <hr>
-    <h2>Create A New Account</h2>
 
-    <form action="#" th:action="@{/saveAccount}" th:object="${accounts}" method="POST">
+
+
+
+    <form action="#" th:action="@{/saveAccount}" th:object="${accounts}" method="POST" >
+        <div class="row">
+            <div class="col-6">
+
+                <h2 >Create A New Account</h2>
 
         <!-- Add hidden form field to handle update -->
         <input type="hidden" th:field="*{accountId}" />
 
-        <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name" class="form-control mb-4 col-10" th:required="required" >
 
-        <input type="text" th:field="*{middleName}" placeholder="Middle Name" class="form-control mb-4 col-4">
+        <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}" class="text-danger">firstName error</p>
 
-        <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{middleName}"  placeholder="Middle Name" class="form-control mb-4 col-10" th:required="required">
 
-        <input type="text" th:field="*{mobileNumber}" placeholder="Mobile Number" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control mb-4 col-10" th:required="required">
 
-        <input type="text" th:field="*{telephoneNumber}" placeholder="Telephone Number" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{mobileNumber}" placeholder="Mobile Number" class="form-control mb-4 col-10" th:required="required">
 
-        <input type="text" th:field="*{emailAddress}" placeholder="Email Address" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{telephoneNumber}" placeholder="Telephone Number" class="form-control mb-4 col-10" >
 
-        <input type="text" th:field="*{dateOfBirth}" placeholder="Date of Birth" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{emailAddress}" placeholder="Email Address" class="form-control mb-4 col-10" th:required="required">
 
-        <input type="text" th:field="*{monthlySalary}" placeholder="Monthly Salary" class="form-control mb-4 col-4">
+        <input type="date" th:field="*{dateOfBirth}" placeholder="Date of Birth" class="form-control mb-4 col-10" th:required="required">
 
-        <h1> Type of Account </h1>
-
-        <label> "Checking Account"</label> <input type="checkbox" th:field="*{checkingAccount}" class="form-control mb-4 col-4">
-
-        <label> "Savings Account"</label> <input type="checkbox" th:field="*{savingsAccount}" class="form-control mb-4 col-4">
-
-        <label> "Money Market Account"</label> <input type="checkbox" th:field="*{moneyMarketAccount}"  class="form-control mb-4 col-4">
-
-        <label> "Certificate of Deposit Account"</label> <input type="checkbox" th:field="*{certificateOfDepositAccount}" class="form-control mb-4 col-4">
-
-        <h1> Home Address </h1>
-
-        <input type="text" th:field="*{homeAddress_street}" placeholder="Street" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{homeAddress_city}" placeholder="City" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{homeAddress_province}" placeholder="Province" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{homeAddress_zipCode}" placeholder="Zip Code" class="form-control mb-4 col-4">
-
-        <h1> Permanent Address </h1>
-
-        <input type="text" th:field="*{permanentAddress_street}" placeholder="Street" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{permanentAddress_city}" placeholder="City" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{permanentAddress_province}" placeholder="Province" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{permanentAddress_zipCode}" placeholder="Zip Code" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{monthlySalary}" placeholder="Monthly Salary" class="form-control mb-4 col-10" th:required="required">
 
 
-        <button th:href="@{/}" type="submit" class="btn btn-info col-2"> Save Account </button>
+                <h2> Type of Account </h2>
+
+                <div class="form-group row">
+                    <input type="checkbox" th:field="*{checkingAccount}" class="form-check-input " >   <label class="form-check-label"> "Checking Account"</label>
+                </div>
+                <div class="form-group row">
+                    <input type="checkbox" th:field="*{savingsAccount}" class="form-check-input" >   <label class="form-check-label"> "Savings Account"</label>
+                </div>
+                <div class="form-group row">
+                    <input type="checkbox" th:field="*{moneyMarketAccount}"  class="form-check-input"> <label class="form-check-label"> "Money Market Account"</label>
+                </div>
+                <div class="form-group row">
+                    <input type="checkbox" th:field="*{certificateOfDepositAccount}" class="form-check-input" >  <label class="form-check-label"> "Certificate of Deposit Account"</label>
+                </div>
+
+
+            </div>
+            <div class="col-6">
+
+                    <h2> Current Address </h2>
+
+        <input type="text" th:field="*{homeAddress_street}" id="homeAddress_street" placeholder="Street" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{homeAddress_city}"  id="homeAddress_city" placeholder="City" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{homeAddress_province}"  id="homeAddress_province" placeholder="Province" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{homeAddress_zipCode}"  id="homeAddress_zipCode" placeholder="Zip Code" class="form-control mb-4 col-10" th:required="required">
+
+        <h2> Permanent Address </h2>
+<div class="form-group row">
+    <div class="col-6">
+        <input type="checkbox"
+               id="checkBox"
+               th:onclick="fillPermanentAddress()"
+               class="form-check-input" > <label class="form-check-label">   &emsp;  Same as current Address </label>
+    </div>
+</div>
+        <input type="text" th:field="*{permanentAddress_street}" id="permanentAddress_street" placeholder="Street" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{permanentAddress_city}" id="permanentAddress_city" placeholder="City" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{permanentAddress_province}" id="permanentAddress_province" placeholder="Province" class="form-control mb-4 col-10" th:required="required">
+        <input type="text" th:field="*{permanentAddress_zipCode}" id="permanentAddress_zipCode" placeholder="Zip Code" class="form-control mb-4 col-10" th:required="required">
+                </div>
+        </div>
+            <div class="row">
+        <button th:href="@{/}" type="submit" class="btn btn-info" > Save Account </button>
+            </div>
+
+
     </form>
+
 
     <hr>
 
-    <a th:href="@{/}"> Back to Employee List</a>
+    <a th:href="@{/}"> Back to Account List</a>
+
 </div>
+
 </body>
 
 </html>

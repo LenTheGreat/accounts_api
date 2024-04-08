@@ -5,14 +5,16 @@ import com.metrobank.testapp.repository.AccountsRepository;
 import com.metrobank.testapp.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -25,12 +27,46 @@ public class AccountController {
     @Autowired
     AccountsRepository accountsRepository;
 
-    @GetMapping("/")
-    public ModelAndView viewHomePage(){
+
+    @GetMapping({"/"})
+    public ModelAndView viewHomePage(Accounts accounts,Model model, String keyword){
+
+        return findPaginated(1,"firstName","asc",keyword,model);
+    }
+
+    /*@GetMapping("/Home")
+    public ModelAndView viewHomePage1(){
         ModelAndView modelAndView = new ModelAndView("view/index");
         modelAndView.addObject("listAccounts", accountService.findAll());
         return modelAndView;
+    }*/
+
+    @GetMapping("/page/{pageNumber}")
+    public ModelAndView findPaginated (@PathVariable (value = "pageNumber") int pageNumber,
+                                       @RequestParam("sortField") String sortField,
+                                       @RequestParam("sortDir") String sortDir,
+                                       @RequestParam(name="keyword", required=false) String keyword,
+                                       Model model){
+        ModelAndView modelAndView = new ModelAndView("view/index");
+        int pageSize = 4;
+
+        Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir,keyword );
+        List<Accounts> listAccounts =page.getContent();
+
+        modelAndView.addObject("currentPage",pageNumber);
+        modelAndView.addObject("totalPages",page.getTotalPages());
+        modelAndView.addObject("totalItems",page.getTotalElements());
+
+        modelAndView.addObject("sortField",sortField);
+        modelAndView.addObject("sortDir",sortDir);
+        modelAndView.addObject("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+
+        model.addAttribute("listAccounts",listAccounts);
+
+        return modelAndView ;
     }
+
+
 
     @GetMapping("/showNewAccountForm")
     public ModelAndView showNewAccountForm (Model model){
@@ -42,13 +78,18 @@ public class AccountController {
     }
 
     @PostMapping("/saveAccount")
-    public ModelAndView saveAccount(@ModelAttribute("accounts") Accounts accounts, ModelMap model){
+    public ModelAndView saveAccount(@Valid @ModelAttribute("accounts") Accounts accounts, ModelMap model, BindingResult bindingResult){
+      /*  if (bindingResult.hasErrors()) {
+
+            return new ModelAndView("view/new_accounts", model);
+        }*/
+
         accountService.createAccount(accounts);
         return new ModelAndView("redirect:/", model);
     }
 
     @GetMapping("/showFormForUpdate/{id}")
-    public ModelAndView showFormForUpdate(@PathVariable(value = "id") long id, Model model){
+    public ModelAndView showFormForUpdate(@PathVariable(value = "id") Long id, Model model){
         Accounts accounts = accountService.findById(id);
         ModelAndView modelAndView = new ModelAndView("view/update_accounts");
         model.addAttribute("accounts", accounts);
@@ -61,6 +102,7 @@ public class AccountController {
         return new ModelAndView("redirect:/");
     }
 
+    //POST MAN
 
     @GetMapping(path = "/findAccount/{accountId}")
     public Accounts findAccount(@PathVariable("accountId") long accountId) {
@@ -71,6 +113,7 @@ public class AccountController {
 
         return accountService.findById(accountId);
     }
+
 
     @GetMapping(path = "/allAccounts")
     public List<Accounts> getAllAccounts(){
@@ -84,7 +127,7 @@ public class AccountController {
         return ResponseEntity.ok("Account deleted successfully");
     }
 
-    // Update Account (mema)
+    // Update Account
     @PutMapping(path ="/updateAccount/{accountId}")
     public ResponseEntity<String>  updateAccount(@PathVariable("accountId") long accountId, @RequestBody@Valid Accounts accounts,BindingResult bindingResult){
         Accounts existingEmailAddress = accountService.findByEmailAddress(accounts.getEmailAddress());
