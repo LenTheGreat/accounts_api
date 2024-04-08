@@ -48,7 +48,7 @@ public class AccountController {
                                        @RequestParam(name="keyword", required=false) String keyword,
                                        Model model){
         ModelAndView modelAndView = new ModelAndView("view/index");
-        int pageSize = 3;
+        int pageSize = 4;
 
         Page<Accounts> page = accountService.findPaginated(pageNumber,pageSize,sortField,sortDir,keyword );
         List<Accounts> listAccounts =page.getContent();

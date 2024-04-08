@@ -105,8 +105,8 @@ public class AccountsRepositoryTest {
 @Test
     void shouldFindAllExistingAccount(){
 
-    Accounts mockAccount1 = new Accounts(5l,"Thalia","G","Grace","6531","78641","thalia@testemail.com","February 29, 2005",false,true,false,true, "Atis", "Angono","RIZAL","1930","Atis","Angono","Rizal","1930",654721);
-    Accounts mockAccount2 = new Accounts(5l,"Percy","K","Jackson","9834","89732","percy@testemail.com","February 29, 2005",true,false,false,true, "Kaimito", "Cainta","RIZAL","1950","Kaimito","Cainta","Rizal","1950",99921);
+    Accounts mockAccount1 = new Accounts(5l,"Thalia","G","Grace","6531","78641","thalia@testemail.com","February 29, 2005",false,true,false,true, "Atis", "Angono","RIZAL","1930","Atis","Angono","Rizal","1930",654721,"000");
+    Accounts mockAccount2 = new Accounts(5l,"Percy","K","Jackson","9834","89732","percy@testemail.com","February 29, 2005",true,false,false,true, "Kaimito", "Cainta","RIZAL","1950","Kaimito","Cainta","Rizal","1950",99921,"000");
 
     when(accountsRepository.findAll()).thenReturn(List.of(mockAccount1,mockAccount2));
 

@@ -47,6 +47,7 @@
                             <th>Permanent Address City</th>
                             <th>Permanent Address Province</th>
                             <th>Permanent Address Zip Code</th>
+                            <th>Account Time Created</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -73,6 +74,7 @@
                             <td th:text="${accounts.permanentAddress_city}"></td>
                             <td th:text="${accounts.permanentAddress_province}"></td>
                             <td th:text="${accounts.permanentAddress_zipCode}"></td>
+                            <td th:text="${accounts.accountTimeCreated}"></td>
                             <td>
                                 <a class="btn btn-danger delBtn"
                                    th:href="@{/deleteAccount/{id}(id=${accounts.accountId})}">Delete</a>
